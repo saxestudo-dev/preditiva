@@ -1,0 +1,14 @@
+{
+  "name": "Preditiva & Alertas Antecipados",
+  "short_name": "Preditiva",
+  "description": "Acompanhamento de Notas de Empenho, prazos e entregas.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f3f5fa",
+  "theme_color": "#2459c4",
+  "lang": "pt-BR",
+  "icons": [
+    {"src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
+  ]
+}

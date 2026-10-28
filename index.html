@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2459c4">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<title>Preditiva & Alertas Antecipados</title>
+<style>
+:root{--bg:#f3f5fa;--card:#fff;--ink:#172033;--muted:#657087;--line:#dfe5ef;--blue:#2459c4;--red:#b42318;--amber:#925c00;--green:#167447}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,Arial,sans-serif}
+main{max-width:1200px;margin:auto;padding:clamp(12px,3vw,24px)}.top,.actions,.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.brand{display:flex;gap:12px;align-items:center}.logo{background:var(--blue);color:#fff;border-radius:13px;padding:12px;font-weight:900;font-size:22px}
+h1{font-size:clamp(22px,4vw,30px);margin:0}h2{font-size:18px;margin:0 0 12px}p{color:var(--muted);margin:4px 0}
+.panel,.stat{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:16px;margin:14px 0}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.stat .label{color:var(--muted);font-size:13px}.num{font-size:28px;font-weight:850}
+button,input,select,textarea{font:inherit}button{border:0;border-radius:9px;padding:10px 13px;font-weight:700;cursor:pointer;background:#e9edf5;color:#26324a}.primary{background:var(--blue);color:white}.red{background:#ffebea;color:var(--red)}
+input,select,textarea{width:100%;padding:10px;border:1px solid #cfd7e5;border-radius:9px;background:#fff;color:var(--ink)}label{display:block;font-size:13px;font-weight:700;margin-bottom:5px}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.full{grid-column:1/-1}.field{min-width:0}.layout{display:grid;grid-template-columns:1fr 1.2fr;gap:14px}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.toolbar input{flex:1;min-width:190px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:10px}table{border-collapse:collapse;width:100%;min-width:760px;background:#fff}th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:top}th{background:#f8f9fc;color:#566176}
+.badge{display:inline-block;border-radius:30px;padding:4px 8px;font-size:11px;font-weight:800}.b-red{background:#ffebea;color:var(--red)}.b-amber{background:#fff1cf;color:var(--amber)}.b-green{background:#e5f7ee;color:var(--green)}.b-blue{background:#eaf0ff;color:var(--blue)}
+.hidden{display:none!important}.warning{padding:12px;border-radius:9px;background:#fff5dd;color:#75510b;font-size:13px}.muted{color:var(--muted);font-size:13px}.toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#172033;color:#fff;padding:12px 16px;border-radius:10px;max-width:90vw;z-index:10}.empty{padding:20px;text-align:center;color:var(--muted)}.login{max-width:440px;margin:8vh auto}.login .panel{padding:24px}.stack{display:grid;gap:12px}.small{font-size:12px}.foot{text-align:center;color:var(--muted);font-size:12px;padding:16px}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.top{align-items:flex-start}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}main{padding:12px}}
+</style>
+</head>
+<body>
+<main>
+  <section id="loginView" class="login">
+    <div class="brand"><div class="logo">P+</div><div><h1>Preditiva & Alertas Antecipados</h1><p>Controle centralizado de empenhos e entregas</p></div></div>
+    <div class="panel stack">
+      <h2>Acessar o sistema</h2>
+      <form id="loginForm" class="stack">
+        <div><label for="email">E-mail institucional</label><input id="email" type="email" autocomplete="username" required></div>
+        <div><label for="password">Senha</label><input id="password" type="password" autocomplete="current-password" required></div>
+        <button class="primary" type="submit">Entrar</button>
+      </form>
+      <p class="muted">O acesso exige uma conta criada pelo administrador do sistema.</p>
+      <p id="loginError" class="warning hidden"></p>
+    </div>
+  </section>
+
+  <section id="appView" class="hidden">
+    <header class="top">
+      <div class="brand"><div class="logo">P+</div><div><div class="muted">CONTROLE DE ENTREGA DE EMPENHOS</div><h1>Preditiva & Alertas Antecipados</h1><p id="welcome"></p></div></div>
+      <div class="actions"><button id="installBtn" class="hidden">Instalar aplicativo</button><button id="pushBtn">Ativar notificações</button><button id="logoutBtn">Sair</button></div>
+    </header>
+    <div class="warning">Versão inicial integrada: os dados são consultados no servidor. A implantação real exige HTTPS, configuração de e-mail/push, contas institucionais e aprovação da TI.</div>
+    <section class="stats">
+      <div class="stat"><div class="label">Em acompanhamento</div><div class="num" id="openCount">0</div></div>
+      <div class="stat"><div class="label">Comunicação pendente</div><div class="num" id="commCount">0</div></div>
+      <div class="stat"><div class="label">Próximos do vencimento</div><div class="num" id="soonCount">0</div></div>
+      <div class="stat"><div class="label">Prazo vencido</div><div class="num" id="lateCount">0</div></div>
+    </section>
+    <div class="layout">
+      <section class="panel">
+        <h2 id="formTitle">＋ Registrar empenho</h2>
+        <form id="noteForm" class="stack">
+          <input id="noteId" type="hidden">
+          <div class="formgrid">
+            <div class="field"><label for="ne">Número da NE *</label><input id="ne" required placeholder="2026NE000123"></div>
+            <div class="field"><label for="ug">UG / unidade</label><input id="ug"></div>
+            <div class="field"><label for="supplier">Fornecedor *</label><input id="supplier" required></div>
+            <div class="field"><label for="owner">Requisitante responsável *</label><select id="owner" required></select></div>
+            <div class="field full"><label for="object">Objeto / material / serviço *</label><input id="object" required></div>
+            <div class="field"><label for="issued">Data de emissão *</label><input id="issued" type="date" required></div>
+            <div class="field"><label for="communication">Data da comunicação oficial</label><input id="communication" type="date"></div>
+            <div class="field"><label for="days">Prazo concedido *</label><select id="days"><option value="30">30 dias corridos</option><option value="45">45 dias corridos</option></select></div>
+            <div class="field"><label for="reference">Referência da comunicação</label><input id="reference" placeholder="Ofício / protocolo"></div>
+            <div class="field full"><label for="notes">Observações</label><textarea id="notes" rows="2"></textarea></div>
+          </div>
+          <p class="muted">O prazo de comunicação considera 3 dias úteis, excluindo fins de semana. Feriados precisam ser configurados conforme o calendário institucional.</p>
+          <div class="actions"><button class="primary" type="submit">Salvar empenho</button><button type="button" id="cancelEdit" class="hidden">Cancelar edição</button></div>
+        </form>
+        <div class="panel">
+          <h2>Comprovantes</h2>
+          <p class="muted">Selecione um empenho na lista para anexar PDF ou imagem (até 5 arquivos por envio).</p>
+          <form id="uploadForm" class="stack">
+            <input id="uploadNoteId" type="hidden">
+            <input id="proofFiles" type="file" accept="application/pdf,image/jpeg,image/png,image/webp" multiple>
+            <button type="submit">Enviar comprovantes do empenho selecionado</button>
+          </form>
+          <div id="attachmentList" class="muted"></div>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="row"><h2>📋 Empenhos e prazos</h2><button id="refreshBtn">Atualizar</button></div>
+        <div class="toolbar"><input id="search" placeholder="Buscar NE, fornecedor, objeto ou responsável"><select id="statusFilter"><option value="">Todas as situações</option><option value="comm">Comunicação pendente</option><option value="soon">Entrega próxima</option><option value="late">Entrega atrasada</option><option value="done">Entregue</option></select></div>
+        <div id="notesList" class="empty">Carregando...</div>
+      </section>
+    </div>
+    <section class="panel">
+      <h2>Histórico e auditoria</h2><p class="muted">Selecione “Histórico” em um processo para consultar as ações registradas.</p><div id="historyList"></div>
+    </section>
+  </section>
+  <div class="foot">Preditiva & Alertas Antecipados · Base inicial integrada · v0.1</div>
+</main>
+<div id="toast" class="toast hidden" role="status"></div>
+<script src="/app.js" defer></script>
+</body></html>
